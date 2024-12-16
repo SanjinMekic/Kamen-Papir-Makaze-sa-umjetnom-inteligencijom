@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rock Paper Scissors with AI</title>
+    <script src="//unpkg.com/brain.js"></script>
+    <script defer src="app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito&family=Nunito+Sans:opsz,wght@6..12,500&family=Varela+Round&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <h1>Kamen-papir-makaze sa AI</h1>
+    <div class="glavniContainer">
+      <div class="lijevo">
+        <p style="margin-bottom: 15px; font-size: 20px">
+          Odabrali ste: <span id="humanChoice"></span>
+        </p>
+        <div class="choices">
+          <img src="kamen.png" alt="Rock" onclick="humanInput(1)" />
+          <img src="papir.png" alt="Paper" onclick="humanInput(2)" />
+          <img src="makaze.png" alt="Scissors" onclick="humanInput(3)" />
+        </div>
+
+        <div class="rezultatiPartije">
+          <h2 style="margin-bottom: 20px; margin-top: 20px">
+            Rezultat partije
+          </h2>
+          <p class="izborAI">
+            AI je odabrala:
+            <img
+              style="margin-left: 30px"
+              id="aiChoiceImage"
+              src="upitnik.jpg"
+              alt="AI Choice"
+              width="100"
+              height="100"
+            />
+          </p>
+          <div class="pobjednikTekst">
+            <p>Pobjednik: <span id="winner"></span></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="desno">
+        <div class="rezultatiUkupno">
+          <h2>Ukupni rezultat</h2>
+          <p class="rezultatTekst">Čovjek: <span id="humanScore">0</span></p>
+          <p class="rezultatTekst">AI: <span id="aiScore">0</span></p>
+          <p class="rezultatTekst">Neriješeno: <span id="drawScore">0</span></p>
+          <p class="rezultatTekst">
+            Ukupno partija: <span id="totalGames">0</span>
+          </p>
+          <button onclick="resetScore()">Restart</button>
+        </div>
+
+        <div class="postavkeKontejner">
+          <h2>Postavke</h2>
+          <label for="patternLengthSlider"
+            >Dužina obrasca: <span id="patternLengthValue">20</span></label
+          >
+          <input
+            id="patternLengthSlider"
+            type="range"
+            min="10"
+            max="30"
+            step="5"
+            value="20"
+            oninput="updatePatternLength(this.value)"
+          />
+
+          <label for="iterationsSlider"
+            >Broj iteracija: <span id="iterationsValue">200</span></label
+          >
+          <input
+            id="iterationsSlider"
+            type="range"
+            min="100"
+            max="500"
+            step="50"
+            value="200"
+            oninput="updateIterations(this.value)"
+          />
+
+          <button onclick="showPopup()">Upute</button>
+        </div>
+        <div class="grafik">
+          <canvas id="scoreChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modalni prozor -->
+    <div id="popupWindow" class="popup-overlay" style="display: none">
+      <div class="popup-content">
+        <span class="close-button" onclick="closePopup()">×</span>
+        <h2>Upute</h2>
+        <p style="margin-top: 10px; margin-bottom: 20px; text-align: justify">
+          <strong>1. Dužina obrasca (pattern length)</strong><br />
+          Ovo je dužina sekvence koja se koristi za treniranje modela. Duži
+          obrazac daje modelu više informacija o korisnikovim prethodnim
+          potezima, ali previše dugačak obrazac može dovesti do gubitka
+          značajnih veza zbog ograničenja memorije modela. Iz ovog razloga
+          dužina sekvence je ograničena na masksimalnu vrijednost 30.<br />
+          <strong>Preporuka:</strong><br />
+          - 10–20: Dobar raspon.<br />
+          - Kraći obrazac ako korisnici često mijenjaju obrazac.<br />
+          - Duži obrazac za kompleksne obrasce.
+        </p>
+        <p style="text-align: justify">
+          <strong>2. Broj iteracija (iterations)</strong><br />
+          Ovo je broj iteracija koje model koristi za učenje obrazaca. Veći broj
+          iteracija može poboljšati preciznost, ali preveliki broj može dovesti
+          do pretreniranja i usporavanja. Iz ovog razloga broj iteracija je
+          ograničena na masksimalnu vrijednost 500.<br />
+          <strong>Preporuka:</strong><br />
+          - 100–200: Brzo treniranje.<br />
+          - 300–500: Detaljno predviđanje.
+        </p>
+        <table
+          border="1"
+          style="width: 100%; text-align: center; margin-top: 20px"
+        >
+          <thead style="margin-top: 10px">
+            <tr>
+              <th>Dužina obrasca</th>
+              <th>Broj iteracija</th>
+              <th>Preporučeno za...</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>10</td>
+              <td>100–200</td>
+              <td>Visoka preciznost, manji obrasci.</td>
+            </tr>
+            <tr>
+              <td>20</td>
+              <td>200–300</td>
+              <td>Uravnotežen trening, idealne vrijednosti</td>
+            </tr>
+            <tr>
+              <td>30</td>
+              <td>300–500</td>
+              <td>Dugi obrasci i detaljno predviđanje.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
