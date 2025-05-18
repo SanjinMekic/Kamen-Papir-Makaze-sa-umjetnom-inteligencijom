@@ -20,9 +20,19 @@
       <div class="lijevo">
         <div class="game-area">
           <div class="choices">
-            <button class="choice-button" onclick="humanInput(1)" title="Kamen">👊</button>
-            <button class="choice-button" onclick="humanInput(2)" title="Papir">✋</button>
-            <button class="choice-button" onclick="humanInput(3)" title="Makaze">✌️</button>
+            <button class="choice-button" onclick="humanInput(1)" title="Kamen">
+              👊
+            </button>
+            <button class="choice-button" onclick="humanInput(2)" title="Papir">
+              ✋
+            </button>
+            <button
+              class="choice-button"
+              onclick="humanInput(3)"
+              title="Makaze"
+            >
+              ✌️
+            </button>
           </div>
 
           <div class="rezultatiPartije">
@@ -32,10 +42,7 @@
             </p>
             <p class="izborAI">
               AI je odabrala:
-              <span
-                id="aiChoiceImage"
-                class="ai-choice"
-              >❓</span>
+              <span id="aiChoiceImage" class="ai-choice">❓</span>
             </p>
             <div class="pobjednikTekst">
               <p>Pobjednik: <span id="winner"></span></p>
@@ -50,10 +57,16 @@
           <div class="score-grid">
             <p class="rezultatTekst">Čovjek: <span id="humanScore">0</span></p>
             <p class="rezultatTekst">AI: <span id="aiScore">0</span></p>
-            <p class="rezultatTekst">Neriješeno: <span id="drawScore">0</span></p>
-            <p class="rezultatTekst">Ukupno partija: <span id="totalGames">0</span></p>
+            <p class="rezultatTekst">
+              Neriješeno: <span id="drawScore">0</span>
+            </p>
+            <p class="rezultatTekst">
+              Ukupno partija: <span id="totalGames">0</span>
+            </p>
           </div>
-          <button onclick="resetScore()" class="reset-button">Restart</button>
+          <button onclick="resetScoreSlider()" class="reset-button">
+            Restart
+          </button>
         </div>
 
         <div class="settings-container">
@@ -98,7 +111,9 @@
       </div>
     </div>
 
-    <button class="settings-button" onclick="toggleSettings()" title="Upute">⚙️</button>
+    <button class="settings-button" onclick="toggleSettings()" title="Upute">
+      ⚙️
+    </button>
 
     <div id="settingsModal" class="settings-modal">
       <div class="settings-content">
@@ -106,7 +121,7 @@
           <h2>Upute</h2>
           <button class="settings-close" onclick="toggleSettings()">×</button>
         </div>
-        
+
         <div class="instructions-content">
           <p>
             <strong>1. Dužina obrasca (pattern length)</strong><br />
@@ -122,10 +137,10 @@
           </p>
           <p>
             <strong>2. Broj iteracija (iterations)</strong><br />
-            Ovo je broj iteracija koje model koristi za učenje obrazaca. Veći broj
-            iteracija može poboljšati preciznost, ali preveliki broj može dovesti
-            do pretreniranja i usporavanja. Iz ovog razloga broj iteracija je
-            ograničena na masksimalnu vrijednost 500.<br />
+            Ovo je broj iteracija koje model koristi za učenje obrazaca. Veći
+            broj iteracija može poboljšati preciznost, ali preveliki broj može
+            dovesti do pretreniranja i usporavanja. Iz ovog razloga broj
+            iteracija je ograničena na masksimalnu vrijednost 500.<br />
             <strong>Preporuka:</strong><br />
             - 100–200: Brzo treniranje.<br />
             - 300–500: Detaljno predviđanje.
@@ -162,16 +177,18 @@
 
     <script>
       function toggleSettings() {
-        const modal = document.getElementById('settingsModal');
-        modal.classList.toggle('active');
+        const modal = document.getElementById("settingsModal");
+        modal.classList.toggle("active");
       }
 
       // Close settings modal when clicking outside
-      document.getElementById('settingsModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-          this.classList.remove('active');
-        }
-      });
+      document
+        .getElementById("settingsModal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) {
+            this.classList.remove("active");
+          }
+        });
     </script>
   </body>
 </html>

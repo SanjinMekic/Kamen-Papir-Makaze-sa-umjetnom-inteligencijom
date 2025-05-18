@@ -1,14 +1,20 @@
-let pattern = [];
-let scoreHuman = 0;
-let scoreAI = 0;
-let scoreDraw = 0; // Dodajemo varijablu za izjednčenja
+let pattern = []; // Niz koji čuva historiju poteza igraca za AI predvidjanje
+let scoreHuman = 0; // Broji pobjede igraca
+let scoreAI = 0; // Broji pobjede AI-a
+let scoreDraw = 0; // Varijablu za izjednčenja
 let totalGames = 0; // Ukupan broj partija
-let chosenByHuman = 0;
-let chosenByAI = 0;
-let winner = "";
-let gameCount = 0;
-let patternLength = 20;
-let iterations = 200;
+let chosenByHuman = 0; // Trenutni izbor igrača (1 = kamen, 2 = papir, 3 = makaze)
+let chosenByAI = 0; // Trenutni izbor AI-a
+let winner = ""; // Cuva rezultat partije ("Covjek", "AI", "Nerijeseno")
+let gameCount = 0; // Broji partije u trenutnoj sesiji
+let patternLength = 20; // Konfigurabilna dužina historije poteza (defaultno 20)
+let iterations = 200; // Konfigurabilni broj iteracija za LSTM trening (defaultno 200)
+
+/**
+ * Funkcija updatePatternLength() postavlja
+ * duzinu historije poteza (patternLength),
+ * promjena ovog broja mijenja tacnost modela
+ */
 
 function updatePatternLength(value) {
   patternLength = parseInt(value, 10);
@@ -16,11 +22,22 @@ function updatePatternLength(value) {
   resetScoreSlider();
 }
 
+/**
+ * Funkcija updateIterations() postavlja
+ * broj itercija za treniranje modela (iterations),
+ * promjena ovog broja mijenja tacnost modela
+ */
+
 function updateIterations(value) {
   iterations = parseInt(value, 10);
   document.getElementById("iterationsValue").innerText = value;
   resetScoreSlider();
 }
+
+/**
+ * Ova funkcija konvertuje broj poslan kroz onClick metodu u html-u
+ * u string (kamen, papir, makaze)
+ */
 
 function stringOf(integer) {
   switch (integer) {
@@ -35,6 +52,11 @@ function stringOf(integer) {
   }
 }
 
+/**
+ * Ova funkcija vrsi obradu unosa igraca i pozivanje AI odgovora,
+ * uz updateovanje interfejsa
+ */
+
 async function humanInput(rockOrPaperOrScissors) {
   chosenByHuman = rockOrPaperOrScissors;
   totalGames++;
@@ -45,6 +67,13 @@ async function humanInput(rockOrPaperOrScissors) {
   updateChart();
 }
 
+/**
+ * U ovoj funkciji se inizijalizuje historija poteza
+ * ukoliko je prazna, radi na nacin da generise nasumicne poteze
+ * od 1-3 kako bi se niz popunio, a duzina niza je svakako odredjena sa
+ * patternLength cijom duzinom se upravlja preko UI
+ */
+
 function prepareData() {
   if (pattern.length < 1) {
     for (let index = 1; index <= patternLength; index++) {
@@ -53,7 +82,11 @@ function prepareData() {
   }
 }
 
-// Ažuriraj obrazac nakon svakog poteza korisnika
+/**
+ * Funkcija azurira pattern nakon svakog poteza korisnika,
+ * radi na nacin da se uklanja najstariji potez iz niza,
+ * a nakon toga se doda novi potez na kraj niza
+ */
 
 function updatePattern() {
   if (gameCount !== 0) {
@@ -62,7 +95,16 @@ function updatePattern() {
   }
 }
 
-// AI koristi brain.js za predikciju
+/**
+ * Ova funkcija sluzi za predvidjanje iduceg poteza igraca
+ * i bira najbolji odgovor, koristi se LSTM neuronska mreza.
+ * Model se trenira na osnovu historije poteza i predvidja
+ * sljedeci potez igraca. Nakon toga azurira historiju poteza i
+ * biramo pobjednicki potez na nacin:
+ *    - Ako AI predvidi da će igrac izabrati 1 (kamen), AI bira 2 (papir)
+ *    - Ako predvidi 2 (papir), AI bira 3 (makaze).
+ *    - Ako predvidi 3 (makaze), AI bira 1 (kamen).
+ */
 
 async function whatShouldAIAnswer() {
   prepareData();
@@ -76,19 +118,20 @@ async function whatShouldAIAnswer() {
   updatePattern();
 
   const roundedHumanWillChoose = Math.round(humanWillChoose);
-  console.log("Human will choose: " + roundedHumanWillChoose);
+  console.log("Response: " + roundedHumanWillChoose);
 
   chosenByAI =
     1 <= roundedHumanWillChoose && roundedHumanWillChoose <= 3
       ? (roundedHumanWillChoose % 3) + 1
       : 1;
 }
-// Određivanje pobjednika
+
+// Funkcija koja odredjuje pobjednika u svakoj partiji
 
 function whoIsTheWinner() {
   if (chosenByHuman === chosenByAI) {
     winner = "Neriješeno";
-    scoreDraw++; // Povećaj broj izjednčenja
+    scoreDraw++;
   } else if (
     (chosenByHuman === 1 && chosenByAI === 3) ||
     (chosenByHuman === 3 && chosenByAI === 2) ||
@@ -102,7 +145,13 @@ function whoIsTheWinner() {
   }
 }
 
-// Ažuriranje UI-a
+/**
+ * Ova funkcija updateuje UI sa novim podacima,
+ * prikazuje izbor igraca u tekstualnom obliku,
+ * Prikazuje pobjednika, azurira broj pobjeda igraca i AI-a i
+ * broja nerijesenih partija i ukupan broj partija.
+ * Postavlja emoji za potez koji je napravio AI.
+ */
 
 function updateUI() {
   document.getElementById("humanChoice").innerText = stringOf(chosenByHuman);
@@ -112,7 +161,6 @@ function updateUI() {
   document.getElementById("drawScore").innerText = scoreDraw;
   document.getElementById("totalGames").innerText = totalGames;
 
-  // Postavljanje emoji-ja na osnovu AI-ovog izbora
   const aiChoiceElement = document.getElementById("aiChoiceImage");
   switch (chosenByAI) {
     case 1:
@@ -125,11 +173,22 @@ function updateUI() {
       aiChoiceElement.textContent = "✌️";
       break;
     default:
-      aiChoiceElement.textContent = "❓"; // Upitnik ako nema izbora
+      aiChoiceElement.textContent = "❓";
   }
 }
 
-// Kreiranje grafikona
+/**
+ * Funkcija sluzi za inicijalizaciju grafika koristeci
+ * chart.js za vizualni prikaz rezultata
+ * u pitanju je bar chart sa sljedecim poretkom:
+ *   - X osa: ["Covjek", "AI", "Nerijeseno"]
+ *   - Y osa: pocinje od 0.
+ * - Boje:
+ *   - Igrac: zelena
+ *   - AI: crvena
+ *   - Nerijeseno: zuta
+ */
+
 const ctx = document.getElementById("scoreChart").getContext("2d");
 const scoreChart = new Chart(ctx, {
   type: "bar",
@@ -162,14 +221,23 @@ const scoreChart = new Chart(ctx, {
   },
 });
 
-// Ažuriranje grafikona
+/**
+ * Ova funkcija postavlja nove vrijednosti za graf i
+ * nakon toga ga ponovo iscrta
+ */
 
 function updateChart() {
   scoreChart.data.datasets[0].data = [scoreHuman, scoreAI, scoreDraw];
   scoreChart.update();
 }
 
-function resetScore() {
+/**
+ * Funkcija sluzi da resetuje sve globalne varijable
+ * na pocetnu vrijednost, vraca postavke za patternLength
+ * i iterations na defaultne (20 i 200), i azurira UI i graf
+ */
+
+function resetScoreSlider() {
   pattern = [];
   scoreHuman = 0;
   scoreAI = 0;
@@ -184,26 +252,16 @@ function resetScore() {
   document.getElementById("patternLengthSlider").value = 20;
   document.getElementById("iterationsSlider").value = 200;
   updateUI();
-  updateChart(); // Ažuriraj grafikon pri resetovanju
+  updateChart();
 }
 
-function resetScoreSlider() {
-  pattern = [];
-  scoreHuman = 0;
-  scoreAI = 0;
-  scoreDraw = 0;
-  totalGames = 0;
-  chosenByHuman = 0;
-  chosenByAI = 0;
-  winner = "";
-  gameCount = 0;
-  updateUI();
-  updateChart(); // Ažuriraj grafikon pri resetovanju
-}
+// Otvara popup
 
 function showPopup() {
   document.getElementById("popupWindow").style.display = "flex";
 }
+
+// Zatvara popup
 
 function closePopup() {
   document.getElementById("popupWindow").style.display = "none";
