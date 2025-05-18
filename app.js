@@ -112,20 +112,20 @@ function updateUI() {
   document.getElementById("drawScore").innerText = scoreDraw;
   document.getElementById("totalGames").innerText = totalGames;
 
-  // Postavljanje slike na osnovu AI-ovog izbora
-  const aiChoiceImage = document.getElementById("aiChoiceImage");
+  // Postavljanje emoji-ja na osnovu AI-ovog izbora
+  const aiChoiceElement = document.getElementById("aiChoiceImage");
   switch (chosenByAI) {
     case 1:
-      aiChoiceImage.src = "kamen.png";
+      aiChoiceElement.textContent = "👊";
       break;
     case 2:
-      aiChoiceImage.src = "papir.png";
+      aiChoiceElement.textContent = "✋";
       break;
     case 3:
-      aiChoiceImage.src = "makaze.png";
+      aiChoiceElement.textContent = "✌️";
       break;
     default:
-      aiChoiceImage.src = "upitnik.jpg"; // Prazno ako nema izbora
+      aiChoiceElement.textContent = "❓"; // Upitnik ako nema izbora
   }
 }
 

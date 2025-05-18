@@ -19,32 +19,28 @@
     <h1>Kamen-papir-makaze sa AI</h1>
     <div class="glavniContainer">
       <div class="lijevo">
-        <p style="margin-bottom: 15px; font-size: 20px">
-          Odabrali ste: <span id="humanChoice"></span>
-        </p>
-        <div class="choices">
-          <img src="kamen.png" alt="Rock" onclick="humanInput(1)" />
-          <img src="papir.png" alt="Paper" onclick="humanInput(2)" />
-          <img src="makaze.png" alt="Scissors" onclick="humanInput(3)" />
-        </div>
+        <div class="game-area">
+          <div class="choices">
+            <button class="choice-button" onclick="humanInput(1)" title="Kamen">👊</button>
+            <button class="choice-button" onclick="humanInput(2)" title="Papir">✋</button>
+            <button class="choice-button" onclick="humanInput(3)" title="Makaze">✌️</button>
+          </div>
 
-        <div class="rezultatiPartije">
-          <h2 style="margin-bottom: 20px; margin-top: 20px">
-            Rezultat partije
-          </h2>
-          <p class="izborAI">
-            AI je odabrala:
-            <img
-              style="margin-left: 30px"
-              id="aiChoiceImage"
-              src="upitnik.jpg"
-              alt="AI Choice"
-              width="100"
-              height="100"
-            />
-          </p>
-          <div class="pobjednikTekst">
-            <p>Pobjednik: <span id="winner"></span></p>
+          <div class="rezultatiPartije">
+            <h2>Rezultat partije</h2>
+            <p class="human-choice">
+              Odabrali ste: <span id="humanChoice"></span>
+            </p>
+            <p class="izborAI">
+              AI je odabrala:
+              <span
+                id="aiChoiceImage"
+                class="ai-choice"
+              >❓</span>
+            </p>
+            <div class="pobjednikTekst">
+              <p>Pobjednik: <span id="winner"></span></p>
+            </div>
           </div>
         </div>
       </div>
@@ -52,20 +48,34 @@
       <div class="desno">
         <div class="rezultatiUkupno">
           <h2>Ukupni rezultat</h2>
-          <p class="rezultatTekst">Čovjek: <span id="humanScore">0</span></p>
-          <p class="rezultatTekst">AI: <span id="aiScore">0</span></p>
-          <p class="rezultatTekst">Neriješeno: <span id="drawScore">0</span></p>
-          <p class="rezultatTekst">
-            Ukupno partija: <span id="totalGames">0</span>
-          </p>
-          <button onclick="resetScore()">Restart</button>
+          <div class="score-grid">
+            <p class="rezultatTekst">Čovjek: <span id="humanScore">0</span></p>
+            <p class="rezultatTekst">AI: <span id="aiScore">0</span></p>
+            <p class="rezultatTekst">Neriješeno: <span id="drawScore">0</span></p>
+            <p class="rezultatTekst">Ukupno partija: <span id="totalGames">0</span></p>
+          </div>
+          <button onclick="resetScore()" class="reset-button">Restart</button>
         </div>
 
-        <div class="postavkeKontejner">
+        <div class="grafik">
+          <canvas id="scoreChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <button class="settings-button" onclick="toggleSettings()" title="Postavke">⚙️</button>
+
+    <div id="settingsModal" class="settings-modal">
+      <div class="settings-content">
+        <div class="settings-header">
           <h2>Postavke</h2>
-          <label for="patternLengthSlider"
-            >Dužina obrasca: <span id="patternLengthValue">20</span></label
-          >
+          <button class="settings-close" onclick="toggleSettings()">×</button>
+        </div>
+        
+        <div class="settings-group">
+          <label for="patternLengthSlider">
+            Dužina obrasca: <span id="patternLengthValue">20</span>
+          </label>
           <input
             id="patternLengthSlider"
             type="range"
@@ -75,10 +85,12 @@
             value="20"
             oninput="updatePatternLength(this.value)"
           />
+        </div>
 
-          <label for="iterationsSlider"
-            >Broj iteracija: <span id="iterationsValue">200</span></label
-          >
+        <div class="settings-group">
+          <label for="iterationsSlider">
+            Broj iteracija: <span id="iterationsValue">200</span>
+          </label>
           <input
             id="iterationsSlider"
             type="range"
@@ -88,16 +100,12 @@
             value="200"
             oninput="updateIterations(this.value)"
           />
+        </div>
 
-          <button onclick="showPopup()">Upute</button>
-        </div>
-        <div class="grafik">
-          <canvas id="scoreChart"></canvas>
-        </div>
+        <button onclick="showPopup()" class="help-button">Upute</button>
       </div>
     </div>
 
-    <!-- Modalni prozor -->
     <div id="popupWindow" class="popup-overlay" style="display: none">
       <div class="popup-content">
         <span class="close-button" onclick="closePopup()">×</span>
@@ -155,5 +163,19 @@
         </table>
       </div>
     </div>
+
+    <script>
+      function toggleSettings() {
+        const modal = document.getElementById('settingsModal');
+        modal.classList.toggle('active');
+      }
+
+      // Close settings modal when clicking outside
+      document.getElementById('settingsModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('active');
+        }
+      });
+    </script>
   </body>
 </html>
