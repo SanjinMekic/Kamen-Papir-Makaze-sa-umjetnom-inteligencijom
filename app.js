@@ -239,7 +239,7 @@ function updateChart() {
  * i iterations na defaultne (20 i 200), i azurira UI i graf
  */
 
-function resetScoreSlider() {
+function resetScore() {
   pattern = [];
   scoreHuman = 0;
   scoreAI = 0;
@@ -253,6 +253,26 @@ function resetScoreSlider() {
   updateIterations(200);
   document.getElementById("patternLengthSlider").value = 20;
   document.getElementById("iterationsSlider").value = 200;
+  updateUI();
+  updateChart();
+}
+
+/**
+ * Funkcija sluzi da resetuje sve globalne varijable
+ * na pocetnu vrijednost, ali uz zadrzavanje vrijednosti
+ * za patternLength i iterations
+ */
+
+function resetScoreSlider() {
+  pattern = [];
+  scoreHuman = 0;
+  scoreAI = 0;
+  scoreDraw = 0;
+  totalGames = 0;
+  chosenByHuman = 0;
+  chosenByAI = 0;
+  winner = "";
+  gameCount = 0;
   updateUI();
   updateChart();
 }
