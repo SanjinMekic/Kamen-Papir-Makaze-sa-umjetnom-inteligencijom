@@ -61,8 +61,8 @@ async function humanInput(rockOrPaperOrScissors) {
   chosenByHuman = rockOrPaperOrScissors;
   totalGames++;
   gameCount++;
-  await whatShouldAIAnswer();
-  whoIsTheWinner();
+  await findDominantStrategy();
+  compareMoves();
   updateUI();
   updateChart();
 }
@@ -106,7 +106,7 @@ function updatePattern() {
  *    - Ako predvidi 3 (makaze), AI bira 1 (kamen).
  */
 
-async function whatShouldAIAnswer() {
+async function findDominantStrategy() {
   prepareData();
 
   const net = new brain.recurrent.LSTMTimeStep();
@@ -126,9 +126,11 @@ async function whatShouldAIAnswer() {
       : 1;
 }
 
-// Funkcija koja odredjuje pobjednika u svakoj partiji
+/**
+ * Funkcija koja odredjuje pobjednika u svakoj partiji
+ */
 
-function whoIsTheWinner() {
+function compareMoves() {
   if (chosenByHuman === chosenByAI) {
     winner = "Neriješeno";
     scoreDraw++;
@@ -255,13 +257,17 @@ function resetScoreSlider() {
   updateChart();
 }
 
-// Otvara popup
+/**
+ * Otvara popup
+ */
 
 function showPopup() {
   document.getElementById("popupWindow").style.display = "flex";
 }
 
-// Zatvara popup
+/**
+ * Zatvara popup
+ */
 
 function closePopup() {
   document.getElementById("popupWindow").style.display = "none";
