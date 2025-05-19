@@ -20,6 +20,7 @@
       <div class="lijevo">
         <div class="game-area">
           <div class="choices">
+            <!-- Na klik prosljedjujemo brojeve umjesto stringa -->
             <button class="choice-button" onclick="humanInput(1)" title="Kamen">
               👊
             </button>
@@ -64,6 +65,7 @@
               Ukupno partija: <span id="totalGames">0</span>
             </p>
           </div>
+          <!-- Poziva se funkcija resetScore() na klik dugmeta reset -->
           <button onclick="resetScore()" class="reset-button">Restart</button>
         </div>
 
@@ -74,6 +76,7 @@
               <label for="patternLengthSlider">
                 Dužina obrasca: <span id="patternLengthValue">20</span>
               </label>
+              <!-- Poziva se funkcija updatePatternLength() prilikom prilagodjavanja ove vrijednosti -->
               <input
                 id="patternLengthSlider"
                 type="range"
@@ -89,6 +92,7 @@
               <label for="iterationsSlider">
                 Broj iteracija: <span id="iterationsValue">200</span>
               </label>
+              <!-- Poziva se funkcija updateIterations() prilikom prilagodjavanja ove vrijednosti -->
               <input
                 id="iterationsSlider"
                 type="range"
@@ -101,14 +105,13 @@
             </div>
           </div>
         </div>
-
         <div class="grafik">
           <h2>Grafik rezultata</h2>
           <canvas id="scoreChart"></canvas>
         </div>
       </div>
     </div>
-
+    <!-- Poziva se funkcija toggleSettings() za prikaz ovog modala -->
     <button class="settings-button" onclick="toggleSettings()" title="Upute">
       ⚙️
     </button>
