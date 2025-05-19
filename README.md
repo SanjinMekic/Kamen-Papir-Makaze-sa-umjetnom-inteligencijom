@@ -1,4 +1,4 @@
-# Rock, Paper, Scissors with Artificial Intelligence 🎮🧠
+# Rock, Paper, Scissors with Artificial Intelligence
 
 This project presents an intelligent agent developed for the classic game *Rock, Paper, Scissors*. Unlike random or static strategies often used in simple games, this agent uses **adaptive learning** and **sequential pattern analysis** to make decisions aimed at maximizing its performance.
 
