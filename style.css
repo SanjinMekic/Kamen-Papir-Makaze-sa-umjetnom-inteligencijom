@@ -426,6 +426,7 @@ button:hover {
   }
 
   .choices {
+    scale: 0.6;
     gap: 1rem;
   }
 
